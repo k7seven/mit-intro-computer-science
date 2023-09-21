@@ -13,5 +13,5 @@ power_result = int(x) ** int(y)
 log_result = math.log(x, 2)
 
 # print results
-print("x**y = ", power_result)
-print("log(x) = ", log_result)
+print("x**y =", power_result)
+print("log(x) =", log_result)
