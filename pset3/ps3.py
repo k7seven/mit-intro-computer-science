@@ -181,7 +181,12 @@ def update_hand(hand, word):
     returns: dictionary (string -> int)
     """
 
-    pass  # TO DO... Remove this line when you implement this function
+
+hand = {'a':1, 'q':1, 'l':2, 'm':1, 'u':1, 'i':1}
+display_hand(hand)
+new_hand = update_hand(hand, 'quail')
+display_hand(new_hand)
+display_hand(hand)
 
 #
 # Problem #3: Test word validity
