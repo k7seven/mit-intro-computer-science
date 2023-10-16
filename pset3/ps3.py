@@ -180,13 +180,12 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)
     returns: dictionary (string -> int)
     """
-
-
-hand = {'a':1, 'q':1, 'l':2, 'm':1, 'u':1, 'i':1}
-display_hand(hand)
-new_hand = update_hand(hand, 'quail')
-display_hand(new_hand)
-display_hand(hand)
+    word = word.lower()
+    new_hand = hand.copy()
+    for letter in word:
+        if new_hand[letter] != 0:
+            new_hand[letter] -= 1
+    return new_hand
 
 #
 # Problem #3: Test word validity
