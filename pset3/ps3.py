@@ -201,8 +201,29 @@ def is_valid_word(word, hand, word_list):
     word_list: list of lowercase strings
     returns: boolean
     """
+    word = word.lower()
+    hand_copy = hand.copy()
+    for w in word_list:
+        if(w == word):
+            for letter in word:
+                # check if letter in word is in hand_copy
+                if(letter not in hand_copy):
+                        return False
+                # iterate thru hand_copy and check for letter and values
+                for key, value in hand_copy.items():
+                    if(letter == key or letter == '*'):
+                        if(value > 0):
+                            hand_copy[key] -= 1
+                        else:
+                            return False
+            return True
+    return False
 
-    pass  # TO DO... Remove this line when you implement this function
+word = 'honey'
+word_list = load_words()
+hand = {'r': 1, 'a': 3, 'p': 2, 't': 1, 'u': 2}
+
+print(is_valid_word(word, hand, word_list))
 
 #
 # Problem #5: Playing a hand
