@@ -252,12 +252,18 @@ def calculate_hand_size(hand):
         size += value
     return size
 
+# helper functions to display score
 def display_hand_total_score(total_score):
     print("Total score for this hand:", total_score)
     print('----------')
 
 def display_word_score(word, score, total_score):
     print(f"'{word}' earned {score} points. Total: {total_score} points")
+    print('----------')
+
+def display_accumulated_total_score(accumulated_total_score):
+    print("Total score over all hands:", accumulated_total_score)
+
 
 def play_hand(hand, word_list):
     """
@@ -326,6 +332,7 @@ def play_hand(hand, word_list):
 
     if(n == 0):
         print("Ran out of letters. Total score:", total_score)
+        print('----------')
         return total_score
 
 
@@ -365,10 +372,11 @@ def substitute_hand(hand, letter):
     letter: string
     returns: dictionary (string -> int)
     """
-    value_of_letter = hand[letter]
 
     if(letter not in hand):
         return hand
+
+    value_of_letter = hand[letter]
 
     random_letter = random.choice(VOWELS + CONSONANTS)
 
@@ -418,15 +426,15 @@ def play_game(word_list):
     while(total_number_of_hands != 0):
         # deal hand
         hand = deal_hand(HAND_SIZE)
-        # Display the hand
-        print("Current Hand: ", end="")
-        display_hand(hand)
 
         # check if substitution have been used
         if(have_used_substitution == False):
+            # Display the hand
             substitution = make_sure_yes_or_no()
 
             if(substitution == 'yes'):
+                print("Current Hand: ", end="")
+                display_hand(hand)
                 letter = input("Which letter would you like to replace: ")
                 substitute_hand(hand, letter)
                 have_used_substitution = True
@@ -437,7 +445,7 @@ def play_game(word_list):
         # one hand has been played
         total_number_of_hands -= 1
 
-    print(accumulated_score)
+    display_accumulated_total_score(accumulated_score)
 
 
 def make_sure_yes_or_no():
@@ -456,4 +464,4 @@ def make_sure_yes_or_no():
 #
 if __name__ == '__main__':
     word_list = load_words()
-    print(play_game(word_list))
+    play_game(word_list)
