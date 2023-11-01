@@ -1,5 +1,5 @@
 # Problem Set 4B
-# Name: <your name here>
+# Name: k77
 # Collaborators:
 # Time Spent: x:xx
 
