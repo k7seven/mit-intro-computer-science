@@ -1,5 +1,5 @@
 # 6.0001/6.00 Problem Set 5 - RSS Feed Filter
-# Name:
+# Name: k77
 # Collaborators:
 # Time:
 
@@ -54,7 +54,29 @@ def process(url):
 
 # Problem 1
 
-# TODO: NewsStory
+class NewsStory(object):
+    def __init__(self, guid, title, description, link, pubdate):
+        self.guid = guid
+        self.title = title
+        self.description = description
+        self.link = link
+        self.pubdate = pubdate
+
+    def get_guid(self):
+        return self.guid
+
+    def get_title(self):
+        return self.title
+
+    def get_description(self):
+        return self.description
+
+    def get_link(self):
+        return self.link
+
+    def get_pubdate(self):
+        return self.pubdate
+
 
 
 #======================
@@ -73,7 +95,27 @@ class Trigger(object):
 # PHRASE TRIGGERS
 
 # Problem 2
-# TODO: PhraseTrigger
+class PhraseTrigger(Trigger):
+    def __init__(self, string_phrase):
+        self.string_phrase = string_phrase.lower()
+
+    def get_string_phrase(self):
+        return self.string_phrase
+
+    def is_phrase_in(self, text):
+        s_phrase = self.get_string_phrase()
+        s_phrase_list = s_phrase.split(' ')
+        for word in s_phrase_list:
+            if not word in text:
+                return False
+
+        return True
+
+
+phrase = PhraseTrigger("i am a phrase")
+print(phrase.is_phrase_in('i am a phrase ok'))
+
+
 
 # Problem 3
 # TODO: TitleTrigger
@@ -164,9 +206,9 @@ def main_thread(master):
         triggerlist = [t1, t4]
 
         # Problem 11
-        # TODO: After implementing read_trigger_config, uncomment this line 
+        # TODO: After implementing read_trigger_config, uncomment this line
         # triggerlist = read_trigger_config('triggers.txt')
-        
+
         # HELPER CODE - you don't need to understand this!
         # Draws the popup window that displays the filtered stories
         # Retrieves and filters the stories from the RSS feeds
@@ -222,4 +264,3 @@ if __name__ == '__main__':
     t = threading.Thread(target=main_thread, args=(root,))
     t.start()
     root.mainloop()
-
