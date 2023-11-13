@@ -96,26 +96,54 @@ class Trigger(object):
 
 # Problem 2
 class PhraseTrigger(Trigger):
+    # subclass initiator
     def __init__(self, string_phrase):
-        self.string_phrase = string_phrase.lower()
+        self.string_phrase = string_phrase
 
+    # getter
     def get_string_phrase(self):
         return self.string_phrase
 
+    # evaluate function inherited from Trigger obj
+    def evaluate(self, story):
+        return story
+
+    # check if phrase in text
     def is_phrase_in(self, text):
-        s_phrase = self.get_string_phrase()
-        s_phrase_list = s_phrase.split(' ')
-        for word in s_phrase_list:
-            if not word in text:
+        # remove punctuation
+        t_list = list(text)
+
+        for letter in t_list:
+            if letter in string.punctuation:
+                i = t_list.index(letter)
+                t_list[i] = ' '
+
+        text = ''.join(t_list)
+
+        # get text and phrase and the lists of them
+        text = text.lower()
+        text_list = text.split()
+        phrase = self.get_string_phrase()
+        phrase_list = phrase.split()
+
+        # iterate through the text list and check if first word of phrase is equal to any word
+        index = 0
+
+        if phrase_list[0] in text_list:
+            index = text_list.index(phrase_list[0])
+
+        # now with the correct index, iterate through the phrase list and check if match the text list word by word
+        for word in phrase_list:
+            # if something goes wrong with the indexing, returns False
+            try:
+                if word != text_list[index]:
+                    return False
+            except:
                 return False
 
+            index += 1
+
         return True
-
-
-phrase = PhraseTrigger("i am a phrase")
-print(phrase.is_phrase_in('i am a phrase ok'))
-
-
 
 # Problem 3
 # TODO: TitleTrigger
