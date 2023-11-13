@@ -104,10 +104,6 @@ class PhraseTrigger(Trigger):
     def get_string_phrase(self):
         return self.string_phrase
 
-    # evaluate function inherited from Trigger obj
-    def evaluate(self, story):
-        return story
-
     # check if phrase in text
     def is_phrase_in(self, text):
         # remove punctuation
@@ -123,7 +119,7 @@ class PhraseTrigger(Trigger):
         # get text and phrase and the lists of them
         text = text.lower()
         text_list = text.split()
-        phrase = self.get_string_phrase()
+        phrase = self.get_string_phrase().lower()
         phrase_list = phrase.split()
 
         # iterate through the text list and check if first word of phrase is equal to any word
@@ -146,10 +142,22 @@ class PhraseTrigger(Trigger):
         return True
 
 # Problem 3
-# TODO: TitleTrigger
+class TitleTrigger(PhraseTrigger):
+    def __init__(self, string_phrase):
+        super().__init__(string_phrase)
+
+    def evaluate(self, story):
+        title = story.get_title()
+        return super().is_phrase_in(title)
 
 # Problem 4
-# TODO: DescriptionTrigger
+class DescriptionTrigger(PhraseTrigger):
+    def __init__(self, string_phrase):
+        super().__init__(string_phrase)
+
+    def evaluate(self, story):
+        description = story.get_description()
+        return super().is_phrase_in(description)
 
 # TIME TRIGGERS
 
