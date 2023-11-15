@@ -193,14 +193,36 @@ class AfterTrigger(TimeTrigger):
 # COMPOSITE TRIGGERS
 
 # Problem 7
-# TODO: NotTrigger
+class NotTrigger(Trigger):
+    def __init__(self, T):
+        self.T = T
+
+    def evaluate(self, story):
+        return not self.T.evaluate(story)
 
 # Problem 8
-# TODO: AndTrigger
+class AndTrigger(Trigger):
+    def __init__(self, trigger_1, trigger_2):
+        self.trigger_1 = trigger_1
+        self.trigger_2 = trigger_2
+
+    def evaluate(self, story):
+        if self.trigger_1.evaluate(story) and self.trigger_2.evaluate(story):
+            return True
+        else:
+            return False
 
 # Problem 9
-# TODO: OrTrigger
+class OrTrigger(Trigger):
+    def __init__(self, trigger_1, trigger_2):
+        self.trigger_1 = trigger_1
+        self.trigger_2 = trigger_2
 
+    def evaluate(self, story):
+        if self.trigger_1.evaluate(story) or self.trigger_2.evaluate(story):
+            return True
+        else:
+            return False
 
 #======================
 # Filtering
@@ -216,7 +238,16 @@ def filter_stories(stories, triggerlist):
     # TODO: Problem 10
     # This is a placeholder
     # (we're just returning all the stories, with no filtering)
-    return stories
+
+    filtered_list = []
+
+    for trigger in triggerlist:
+        for story in stories:
+            if trigger.evaluate(story):
+                filtered_list.append(story)
+
+
+    return filtered_list
 
 
 
@@ -254,11 +285,11 @@ def main_thread(master):
     # A sample trigger list - you might need to change the phrases to correspond
     # to what is currently in the news
     try:
-        t1 = TitleTrigger("election")
-        t2 = DescriptionTrigger("Trump")
-        t3 = DescriptionTrigger("Clinton")
+        t1 = TitleTrigger("US")
+        t2 = DescriptionTrigger("israel")
+        t3 = DescriptionTrigger("russia")
         t4 = AndTrigger(t2, t3)
-        triggerlist = [t1, t4]
+        triggerlist = [t1, t2, t3, t4]
 
         # Problem 11
         # TODO: After implementing read_trigger_config, uncomment this line
@@ -298,7 +329,8 @@ def main_thread(master):
             stories = process("http://news.google.com/news?output=rss")
 
             # Get stories from Yahoo's Top Stories RSS news feed
-            stories.extend(process("http://news.yahoo.com/rss/topstories"))
+            # stories.extend(process("http://news.yahoo.com/rss/topstories"))
+            # stories = process("http://news.yahoo.com/rss/topstories")
 
             stories = filter_stories(stories, triggerlist)
 
