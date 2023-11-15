@@ -177,6 +177,8 @@ class BeforeTrigger(TimeTrigger):
         pubdate = story.get_pubdate().replace(tzinfo=pytz.timezone("EST"))
         if self.datetime_obj > pubdate:
             return True
+        else:
+            return False
 
 
 class AfterTrigger(TimeTrigger):
@@ -188,6 +190,8 @@ class AfterTrigger(TimeTrigger):
         pubdate = story.get_pubdate().replace(tzinfo=pytz.timezone("EST"))
         if self.datetime_obj < pubdate:
             return True
+        else:
+            return False
 
 
 # COMPOSITE TRIGGERS
@@ -235,10 +239,6 @@ def filter_stories(stories, triggerlist):
 
     Returns: a list of only the stories for which a trigger in triggerlist fires.
     """
-    # TODO: Problem 10
-    # This is a placeholder
-    # (we're just returning all the stories, with no filtering)
-
     filtered_list = []
 
     for trigger in triggerlist:
@@ -275,8 +275,31 @@ def read_trigger_config(filename):
     # line is the list of lines that you need to parse and for which you need
     # to build triggers
 
-    print(lines) # for now, print it so you see what it contains!
+    trigger_dict = {}
+    added_triggers = []
 
+    for line in lines:
+        line = line.split(',')
+        if line[0][0] == 't':
+            if line[1] == 'TITLE':
+                trigger_dict[line[0]] = TitleTrigger(line[2])
+            elif line[1] == 'DESCRIPTION':
+                trigger_dict[line[0]] = DescriptionTrigger(line[2])
+            elif line[1] == 'BEFORE':
+                trigger_dict[line[0]] = BeforeTrigger(line[2])
+            elif line[1] == 'AFTER':
+                trigger_dict[line[0]] = AfterTrigger(line[2])
+            elif line[1] == 'NOT':
+                trigger_dict[line[0]] = NotTrigger(line[2])
+            elif line[1] == 'AND':
+                trigger_dict[line[0]] = AndTrigger(trigger_dict[line[2]], trigger_dict[line[3]])
+            elif line[1] == 'OR':
+                trigger_dict[line[0]] = OrTrigger(trigger_dict[line[2]], trigger_dict[line[3]])
+        else:
+            for el in line[1:]:
+                added_triggers.append(trigger_dict[el])
+
+    return added_triggers
 
 
 SLEEPTIME = 120 #seconds -- how often we poll
@@ -285,15 +308,9 @@ def main_thread(master):
     # A sample trigger list - you might need to change the phrases to correspond
     # to what is currently in the news
     try:
-        t1 = TitleTrigger("US")
-        t2 = DescriptionTrigger("israel")
-        t3 = DescriptionTrigger("russia")
-        t4 = AndTrigger(t2, t3)
-        triggerlist = [t1, t2, t3, t4]
 
         # Problem 11
-        # TODO: After implementing read_trigger_config, uncomment this line
-        # triggerlist = read_trigger_config('triggers.txt')
+        triggerlist = read_trigger_config('triggers.txt')
 
         # HELPER CODE - you don't need to understand this!
         # Draws the popup window that displays the filtered stories
